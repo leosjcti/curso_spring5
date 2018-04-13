@@ -1,0 +1,83 @@
+<html xmlns:th="www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${titulo}"></title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+	integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+	crossorigin="anonymous">
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-md navbar-dark  bg-dark">
+		<a class="navbar-brand" href="#">Spring Boot</a>
+		<button class="navbar-toggler" type="button">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link" href="#">Home</a></li>
+				<li class="nav-item"><a class="nav-link" th:href="@{/listar}">Clientes</a></li>
+			</ul>
+		</div>
+	</nav>
+
+
+	<div class="container">
+		<h2 th:text="${titulo}"
+			class="text-secondary border-bottom border-danger"></h2>
+	
+		<div th:object="${cliente}" th:remove="tag">
+			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+				<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>				
+			</ul>
+		</div>
+	
+	
+		<form th:action="@{/form}" th:object="${cliente}" method="POST">
+
+			<div class="form-group">
+				<label class="col-sm-2 col-form-label">Nome</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" th:field=*{nome} th:errorclass="'form-control alert-danger'" />
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></small>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 col-form-label">Sobrenome</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" th:field=*{sobrenome} th:errorclass="'form-control alert-danger'" />
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('sobrenome')}" th:errors="*{sobrenome}"></small>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 col-form-label">E-mail</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" th:field=*{email} th:errorclass="'form-control alert-danger'" />
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-2 col-form-label">Data</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" th:field=*{dataCriacao} th:errorclass="'form-control alert-danger'" />
+					<small class="form-text text-danger" th:if="${#fields.hasErrors('dataCriacao')}" th:errors="*{dataCriacao}"></small>
+				</div>
+			</div>
+			<input type="submit" value="Salvar Cliente" class="btn btn-primary" />
+			<input type="hidden" th:field="*{id}" />
+		</form>
+	</div>
+
+	<div class="container">
+		<hr>
+		<!-- <img th:src="@{/images/springlogo.png}" width="200" height="150"> -->
+		<footer>
+			<p>&copy; Company 2017</p>
+		</footer>
+	</div>
+</body>
+</html>
