@@ -24,6 +24,7 @@
 							<th>Sobrenome</th>
 							<th>E-mail</th>
 							<th>Data</th>
+							<th>Fatura</th>
 							<th>Editar</th>
 							<th>Excluir</th>
 						</tr>
@@ -35,6 +36,8 @@
 							<td th:text="${cliente.sobrenome}"></td>
 							<td th:text="${cliente.email}"></td>
 							<td th:text="${cliente.dataCriacao}"></td>
+							<td><a class="btn btn-link btn-xs" th:href="@{'/fatura/form/' + ${cliente.id}}">Fatura</a></td>
+							
 							<td><a class="btn btn-link btn-xs"
 								th:href="@{/form/} + ${cliente.id}" th:text="'Editar'"></a></td>
 							<td><a class="btn btn-link btn-xs"

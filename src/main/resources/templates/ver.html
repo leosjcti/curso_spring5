@@ -10,6 +10,11 @@
 		<div class="card bg-light">
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
+			
+				<h4>
+					<a class="btn btn-link btn-xs" th:href="@{'/fatura/form/' + ${cliente.id}}">Fatura</a>
+				</h4>
+
 
 				<img class="img-thumbnail rounded float-left" style="max-width: 25%"
 					th:src="@{'/uploads/' + ${cliente.foto}}" th:alt="${cliente.foto}" />
@@ -20,6 +25,30 @@
 					<li class="list-group-item" th:text="${cliente.email}"></li>
 					<li class="list-group-item" th:text="${cliente.dataCriacao}"></li>
 				</ul>
+
+				<div th:if="${#lists.isEmpty(cliente.faturas)}"
+					class="alert alert-info my-4"
+					th:text="'Nao foi encontrada fatura para o cliente ' + ${cliente.nome} ">
+				</div>
+
+				<table th:if="${not #lists.isEmpty(cliente.faturas)}" class="table table-bordered table-striped my-4">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Id</th>
+							<th>Descricao</th>
+							<th>Data</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="fatura: ${cliente.faturas}">
+							<td th:text="${fatura.id}"></td>
+							<td th:text="${fatura.descricao}"></td>
+							<td th:text="${fatura.dataCriacao}"></td>
+							<td th:text="${fatura.total}"></td>
+						</tr>
+					</tbody>
+				</table>
 
 			</div>
 		</div>

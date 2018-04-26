@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<div class="card bg-light">
+			<div class="card-header" th:text="${titulo}"></div>
+			<div class="card-body">
+				<h4 class="card-title">
+					<a class="btn btn-link btn-xs" th:href="@{'/ver/' + ${fatura.cliente.id}}">&laquo; Voltar</a>
+				</h4>
+
+				<form th:action="@{fatura/form}" th:object="${fatura}" method="post">
+
+					<div class="form-group row">
+
+						<label class="col-sm-2 col-form-label" th:text="'Cliente'"></label>
+						<div class="col-sm-6">
+							<input th:value="${fatura.cliente.nome}" disabled="disabled"
+								class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label" th:text="'Descrição'"></label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{descricao}" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label" th:text="'Observação'"></label>
+						<div class="col-sm-6">
+							<textarea th:field="*{observacao}" class="form-control"></textarea>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label" th:text="'Buscar Produto'"></label>
+						<div class="col-sm-6">
+							<input type="text" name="buscar_produto" id="buscar_produto" class="form-control" />
+						</div>
+					</div>
+					
+					<table th:replace="fatura/template-itens :: itensFatura"></table>
+					
+					<table id="carregarItensProdutos" class="table table-sm table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Nome</th>
+								<th>Preço</th>
+								<th>Quantidade</th>
+								<th>Total</th>
+								<th>Excluir</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<h5>Total: <span class="badge badge-secondary" id="gran_total">0</span></h5>
+					
+
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<input type="submit" th:value="${titulo}"
+								class="btn btn-secundary" />
+						</div>
+					</div>
+				</form>
+
+
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="layout/layout :: footer"></div>
+	<script th:replace="fatura/js/autocomplete-produtos :: javascript"></script> 
+</body>
+</html>

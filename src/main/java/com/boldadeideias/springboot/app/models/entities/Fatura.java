@@ -94,6 +94,23 @@ public class Fatura implements Serializable {
 	public void addItemFatura(ItemFatura item) {
 		this.itens.add(item);
 	}
+	
+	public Double getTotal() {
+		Double total = 0.0;
+		
+		int size = itens.size();
+		
+		try {
+			for (int i = 0; i < size; i++) {
+				total += itens.get(i).calcularQuantidade();
+			}
+			return total;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0.0;
+		}
+		
+	}
 
 	private static final long serialVersionUID = 1L;
 	

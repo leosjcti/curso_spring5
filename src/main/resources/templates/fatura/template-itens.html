@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<table th:fragment="itensFatura" class="d-none">
+
+		<tbody id="templateItensFatura">
+			<tr id="row_{ID}">
+				<td class="d-none"><input type="hidden" value="{ID}"
+					name="item_id[]" /></td>
+				<td>{NOME}</td>
+				<td>{PRECO}</td>
+				<td><input type="number" value="1" name="quantidade_[]"
+					id="quantidade_{ID}" class="form-control col-sm-4"
+					onchange="itensHelper.calcularQtd({ID}, {PRECO}, this.value);" /></td>
+
+				<td><span id="total_qtd_{ID}">0</span></td>
+				<td><a href="#" class="btn btn-link btn-xs"
+					onclick="itensHelper.excluirLinhaFatura({ID});">Excluir</a></td>
+			</tr>
+		</tbody>
+
+	</table>
+
+</body>
+</html>

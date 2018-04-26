@@ -1,0 +1,116 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+		
+		$(document).ready(function(){ //Metodo ready assegura que todo o documento foi carregado
+			
+			console.log("Buscando produto no controller");
+			
+			$("#buscar_produto").autocomplete({
+				
+				source: function(request, response){
+					$.ajax({
+						url: "/fatura/carregar_produtos/"+ request.term, //Term pega o valor do input						
+						dataType: 'json',
+						data: { //Outra forma de enviar parametro
+							term: request.term 
+						},
+						success: function(data){
+							response($.map(data, function(item){ //Pega o retorno, mapeia para retornar
+								return{
+									value: item.id,
+									label: item.nome,
+									preco: item.preco
+								};
+								
+							}));
+						}
+					});					
+				},
+				
+				select: function(event, ui){ //Preenche o campo com valor do autocomplete
+					//console.log("Retornando" + ui.item.label);
+					
+					//$("#buscar_produto").val(ui.item.label);
+					
+					
+					if(itensHelper.hasProduto(ui.item.value)) {
+						itensHelper.incrementaQtd(ui.item.value, ui.item.preco);
+						return false;
+					}
+					
+				
+					var linha = $("#templateItensFatura").html(); //Pega o conteudo do template.
+					
+					linha = linha.replace(/{ID}/g, ui.item.value); //Altera o valor do ID, flag g é para ser global
+					linha = linha.replace(/{NOME}/g, ui.item.label);
+					linha = linha.replace(/{PRECO}/g, ui.item.preco);
+					
+					$("#carregarItensProdutos tbody").append(linha); //Coloca o conteudo na tabela da view
+										
+					//Calcula a quantidade por linha
+					itensHelper.calcularQtd(ui.item.value, ui.item.preco, 1);
+					
+					return false;
+				}				
+			});	
+			
+			
+			$("form").submit(function(){
+				$("#templateItensFatura").remove();
+				return;				
+			});
+			
+		});
+		
+		var itensHelper = {
+				calcularQtd: function(id, preco, qtd){
+					$("#total_qtd_"+id).html(parseInt(qtd) * parseInt(preco));
+					this.calcularGranTotal();
+				},
+				
+				//Por cada input vamos perguntar se o id que se passa por parametro é igual ao valor
+				hasProduto: function(id) {
+					resultado = false;
+					$('input[name="item_id[]"]').each(function(){
+						
+						if(parseInt(id) == parseInt($(this).val()) ) {
+							resultado = true;
+						}
+					});
+					return resultado;
+				},
+				
+				
+				//Verifica se quantidade tem valor numerico, se não atribui zero
+				incrementaQtd: function(id, preco) {
+					var qtd = $("#quantidade_" + id).val() ? parseInt($("#quantidade_" + id).val()) : 0;
+					$("#quantidade_" + id).val(++qtd);
+					this.calcularQtd(id, preco, qtd);
+				},
+				
+				
+				excluirLinhaFatura: function(id){
+					$("#row_" +id).remove();
+					this.calcularGranTotal();
+				},
+				
+				
+				calcularGranTotal: function() {
+					var total = 0;
+					//Busca em todos os spans que tenha esse id. ^expressão regular
+					$('span[id^="total_qtd_"]').each(function(){
+						
+						//Pega o conteudo html do Span
+						total += parseInt($(this).html());
+						//Atribui o valor a view
+						$("#gran_total").html(total);
+					});
+				}
+		}
+	
+	
+	</script>
+</body>
+</html>
